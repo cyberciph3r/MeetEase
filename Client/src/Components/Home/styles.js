@@ -108,6 +108,9 @@ const useStyles = makeStyles((theme) => ({
       background: "white",
       color: "#FF464B",
     },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.8rem",
+    },
   },
 }));
 
