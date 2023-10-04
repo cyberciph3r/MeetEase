@@ -29,6 +29,7 @@ const db = mysql.createConnection({
   host: process.env.MYSQL_HOST,
   user: process.env.MYSQL_USER,
   password: process.env.MYSQL_PASSWORD,
+  database: process.env.MYSQL_DB,
 });
 
 db.connect((err) => {
@@ -39,13 +40,13 @@ db.connect((err) => {
   console.log("Connected to MySQL");
 });
 
-const createDB = "CREATE DATABASE IF NOT EXISTS meetingsdb";
-db.query(createDB, (err, results) => {
-  if (err) {
-    console.log("DB not created");
-  }
-  console.log("DB created or already exists");
-});
+// const createDB = "CREATE DATABASE IF NOT EXISTS meetingsdb;
+// db.query(createDB, (err, results) => {
+//   if (err) {
+//     console.log("DB not created");
+//   }
+//   console.log("DB created or already exists");
+// });
 
 app.get("/", (req, res) => {
   res.send("Hello");
@@ -54,7 +55,7 @@ app.get("/", (req, res) => {
 app.post("/get-meetings-data", (req, res) => {
   const { user_email } = req.body;
   db.query(
-    "SELECT * FROM information_schema.tables WHERE table_schema = 'meetingsdb' AND table_name = 'meetings'",
+    `SELECT * FROM information_schema.tables WHERE table_schema = '${process.env.MYSQL_DB}' AND table_name = 'meetings'`,
     (err, table) => {
       if (err) {
         console.log(err);
@@ -62,7 +63,7 @@ app.post("/get-meetings-data", (req, res) => {
       }
       if (table.length > 0) {
         db.query(
-          "SELECT mid,meeting_name,date_created,join_link FROM meetingsdb.meetings WHERE host_email=? ORDER BY id DESC",
+          "SELECT mid,meeting_name,date_created,join_link FROM meetings WHERE host_email=? ORDER BY id DESC",
           [user_email],
           (err, data) => {
             if (err) {
@@ -81,7 +82,7 @@ app.post("/get-meetings-data", (req, res) => {
 
 app.post("/create-table", (req, res) => {
   const createTableQ =
-    "CREATE TABLE IF NOT EXISTS meetingsdb.meetings(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,mid VARCHAR(255),host_name VARCHAR(255),host_email VARCHAR(255),meeting_name VARCHAR(255),date_created VARCHAR(255),date_time_slots JSON,join_link VARCHAR(255))";
+    "CREATE TABLE IF NOT EXISTS meetings(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,mid VARCHAR(255),host_name VARCHAR(255),host_email VARCHAR(255),meeting_name VARCHAR(255),date_created VARCHAR(255),date_time_slots JSON,join_link VARCHAR(255))";
 
   db.query(createTableQ, (err, _) => {
     if (err) {
@@ -104,7 +105,7 @@ app.post("/create-table", (req, res) => {
   var meetingID = uuidv4();
   var join_link = `http://localhost:5173/join/${meetingID}/${scheduler_view}/${slotDuration}`;
   db.query(
-    "INSERT INTO meetingsdb.meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,join_link) VALUES (?,?,?,?,?,?,?)",
+    "INSERT INTO meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,join_link) VALUES (?,?,?,?,?,?,?)",
     [
       meetingID,
       host_name,
@@ -127,7 +128,7 @@ app.post("/create-table", (req, res) => {
 app.post("/availability", (req, res) => {
   const { meeting_id } = req.body;
   db.query(
-    "SELECT meeting_name,host_name,host_email,date_time_slots FROM meetingsdb.meetings WHERE mid = ?",
+    "SELECT meeting_name,host_name,host_email,date_time_slots FROM meetings WHERE mid = ?",
     [meeting_id],
     (err, data) => {
       if (err) {
@@ -157,7 +158,7 @@ app.post("/create-token", async (req, res) => {
   res.json(googleUserInfo.data);
 
   db.query(
-    "CREATE TABLE IF NOT EXISTS meetingsdb.tokens(host_email VARCHAR(255) PRIMARY KEY,refresh_token VARCHAR(255))",
+    "CREATE TABLE IF NOT EXISTS tokens(host_email VARCHAR(255) PRIMARY KEY,refresh_token VARCHAR(255))",
     (err, _) => {
       if (err) {
         console.log("Error:", err);
@@ -168,7 +169,7 @@ app.post("/create-token", async (req, res) => {
   );
 
   db.query(
-    "INSERT IGNORE INTO meetingsdb.tokens VALUES (?,?)",
+    "INSERT IGNORE INTO tokens VALUES (?,?)",
     [host_email, refreshtoken],
     (err, _) => {
       if (err) {
@@ -193,7 +194,7 @@ app.post("/create-event-and-update-timeslots", (req, res) => {
   } = req.body;
 
   db.query(
-    "SELECT refresh_token from meetingsdb.tokens WHERE host_email=?",
+    "SELECT refresh_token from tokens WHERE host_email=?",
     [host_email],
     (err, refreshToken) => {
       if (err) {
@@ -227,7 +228,7 @@ app.post("/create-event-and-update-timeslots", (req, res) => {
   );
 
   db.query(
-    "UPDATE meetingsdb.meetings SET date_time_slots=? WHERE mid=?",
+    "UPDATE meetings SET date_time_slots=? WHERE mid=?",
     [JSON.stringify(timeslots), meeting_id],
     (err, _) => {
       if (err) {
@@ -244,7 +245,7 @@ app.post("/updateTimeslots", (req, res) => {
   const { meeting_id, meeting_name, timeslots } = req.body;
 
   db.query(
-    "UPDATE meetingsdb.meetings SET meeting_name=?,date_time_slots=? WHERE mid=?",
+    "UPDATE meetings SET meeting_name=?,date_time_slots=? WHERE mid=?",
     [meeting_name, JSON.stringify(timeslots), meeting_id],
     (err, _) => {
       if (err) {
@@ -260,18 +261,14 @@ app.post("/updateTimeslots", (req, res) => {
 app.post("/delete-meeting", (req, res) => {
   const { meeting_id } = req.body;
 
-  db.query(
-    "DELETE FROM meetingsdb.meetings WHERE mid=?",
-    [meeting_id],
-    (err, _) => {
-      if (err) {
-        res.json("Error");
-        console.log("Error: ", err);
-        return;
-      }
-      console.log("Meeting Deleted!!");
+  db.query("DELETE FROM meetings WHERE mid=?", [meeting_id], (err, _) => {
+    if (err) {
+      res.json("Error");
+      console.log("Error: ", err);
+      return;
     }
-  );
+    console.log("Meeting Deleted!!");
+  });
 });
 
 app.listen(2000);
