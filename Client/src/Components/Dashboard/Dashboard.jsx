@@ -1,0 +1,136 @@
+import React, { useEffect, useState } from "react";
+import useStyles from "./styles";
+import { Typography } from "@material-ui/core";
+import { Link } from "react-router-dom";
+import useStore from "../Zustand/zustand";
+import EditNoteIcon from "@mui/icons-material/EditNote";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import ShareIcon from "@mui/icons-material/Share";
+import BackHome from "../BackHome/BackHome";
+import AppBarComponent from "../AppBar/AppBarComponent";
+import CopyToClipboard from "react-copy-to-clipboard";
+import { useAlert } from "react-alert";
+
+const Dashboard = () => {
+  const classes = useStyles();
+  const { user } = useStore();
+  const [meetings, setMeetings] = useState([]);
+  const alert = useAlert();
+
+  useEffect(() => {
+    const getMeetingsData = async () => {
+      try {
+        var response = await fetch("http://localhost:2000/get-meetings-data", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_email: user.email,
+          }),
+        });
+
+        try {
+          var data = await response.json();
+          setMeetings(data);
+        } catch (error) {
+          console.log(error);
+        }
+      } catch (error) {
+        console.log("Error:", error);
+      }
+    };
+    getMeetingsData();
+  }, [meetings]);
+
+  const handleDeleteMeeting = async (mid) => {
+    await fetch("http://localhost:2000/delete-meeting", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        meeting_id: mid,
+      }),
+    });
+  };
+
+  if (user == null) {
+    return <BackHome />;
+  }
+  return (
+    <>
+      <AppBarComponent />
+      <div className={classes.main}>
+        <Typography className={classes.title}>
+          {meetings.length == 0 ? "No Meetings Found!" : "My Meetings"}
+        </Typography>
+        {meetings.map((meeting) => {
+          return (
+            <div className={classes.meetingCard}>
+              <Typography className={classes.meetingName}>
+                {meeting["meeting_name"]}
+              </Typography>
+              <div className={classes.meetingDsc}>
+                <Typography className={classes.typography}>
+                  ID: <span className={classes.span}>{meeting["mid"]}</span>
+                </Typography>
+                <Typography className={classes.typography}>
+                  Date created:{" "}
+                  <span className={classes.span}>
+                    {meeting["date_created"].toUpperCase()}
+                  </span>
+                </Typography>
+                <div className={classes.icons}>
+                  <CopyToClipboard text={meeting["join_link"]}>
+                    <ShareIcon
+                      className={classes.shrMeeting}
+                      onClick={() => {
+                        alert.success("Link copied!");
+                      }}
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                      }}
+                    />
+                  </CopyToClipboard>
+
+                  <Link
+                    className={classes.editMeetingsLink}
+                    to={meeting["join_link"].replace("join", "editMeeting")}
+                  >
+                    <EditNoteIcon
+                      className={classes.editMeeting}
+                      style={{
+                        width: "1rem",
+                        height: "1rem",
+                      }}
+                    />
+                  </Link>
+                  <DeleteForeverIcon
+                    onClick={() => {
+                      var res = window.confirm(
+                        "Do you really want to delete the meeting?"
+                      );
+                      if (res) {
+                        handleDeleteMeeting(meeting["mid"]);
+                        alert.success("Meeting Deleted!");
+                      }
+                    }}
+                    className={classes.dltMeeting}
+                    style={{
+                      width: "1rem",
+                      height: "1rem",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+};
+
+export default Dashboard;
