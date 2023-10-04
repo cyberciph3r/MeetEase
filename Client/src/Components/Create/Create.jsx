@@ -45,20 +45,23 @@ const Create = () => {
   const handleNext = () => {
     var createMeeting = async () => {
       try {
-        var response = await fetch("http://localhost:2000/create-table", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            meeting_name: meetingName,
-            host_name: user.name,
-            host_email: user.email,
-            timeslots: timeslots,
-            scheduler_view: view,
-            slotDuration: slotDuration,
-          }),
-        });
+        var response = await fetch(
+          "https://meet-ease.vercel.app/create-table",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              meeting_name: meetingName,
+              host_name: user.name,
+              host_email: user.email,
+              timeslots: timeslots,
+              scheduler_view: view,
+              slotDuration: slotDuration,
+            }),
+          }
+        );
 
         try {
           var meeting_id = await response.json();
@@ -120,41 +123,26 @@ const Create = () => {
                 Set your Availability
               </Typography>
               <div className={classes.setDiv}>
-                <div className={classes.setDivFlex}>
-                  <Typography className={classes.txt}>
-                    Slot Duration in mins:{" "}
-                  </Typography>
-                  <input
-                    type="number"
-                    placeholder="mm"
-                    className={classes.durationTextFld}
-                    onChange={(e) => {
-                      setSlotDuration(e.target.value);
-                    }}
-                    value={slotDuration}
-                  />
-                  <button
-                    className={classes.durationBtn}
-                    onClick={() => {
-                      setKey(key + 1);
-                    }}
-                  >
-                    OK
-                  </button>
-                </div>
-                <div className={classes.setDivFlex}>
-                  <Typography className={classes.txt}>Fee:</Typography>
-                  <input
-                    type="number"
-                    placeholder="Fee"
-                    className={classes.durationTextFld}
-                    onChange={(e) => {
-                      setSlotDuration(e.target.value);
-                    }}
-                    value={slotDuration}
-                  />
-                  /-
-                </div>
+                <Typography className={classes.txt}>
+                  Slot Duration in mins:{" "}
+                </Typography>
+                <input
+                  type="number"
+                  placeholder="mm"
+                  className={classes.durationTextFld}
+                  onChange={(e) => {
+                    setSlotDuration(e.target.value);
+                  }}
+                  value={slotDuration}
+                />
+                <button
+                  className={classes.durationBtn}
+                  onClick={() => {
+                    setKey(key + 1);
+                  }}
+                >
+                  OK
+                </button>
               </div>
             </div>
 

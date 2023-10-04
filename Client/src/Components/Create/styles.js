@@ -37,14 +37,11 @@ const useStyles = makeStyles((theme) => ({
   setDiv: {
     display: "flex",
     width: "90vw",
-    justifyContent: "space-between",
-  },
-  setDivFlex: {
-    display: "flex",
+    justifyContent: "center",
     alignItems: "center",
   },
   durationTextFld: {
-    width: "10%",
+    width: "4%",
     margin: "1rem",
     backgroundColor: "white",
     outline: "none",
@@ -53,10 +50,10 @@ const useStyles = makeStyles((theme) => ({
     padding: "1rem",
     fontSize: "1.2rem",
     [theme.breakpoints.down("sm")]: {
-      width: "35%",
+      width: "6%",
     },
     [theme.breakpoints.down("xs")]: {
-      width: "7%",
+      width: "8%",
       padding: "0.5rem",
       margin: "0.5rem",
       fontSize: "0.8rem",

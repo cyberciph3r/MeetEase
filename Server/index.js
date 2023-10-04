@@ -9,7 +9,7 @@ require("dotenv").config();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: "*",
   })
 );
 
@@ -22,7 +22,7 @@ const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
 const oauth2Client = new google.auth.OAuth2(
   google_client_id,
   google_client_secret,
-  "http://localhost:5173"
+  "https://meetease.netlify.app"
 );
 
 const db = mysql.createConnection({
@@ -103,7 +103,7 @@ app.post("/create-table", (req, res) => {
 
   var date_created = new Date().toLocaleString();
   var meetingID = uuidv4();
-  var join_link = `http://localhost:5173/join/${meetingID}/${scheduler_view}/${slotDuration}`;
+  var join_link = `https://meetease.netlify.app/join/${meetingID}/${scheduler_view}/${slotDuration}`;
   db.query(
     "INSERT INTO meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,join_link) VALUES (?,?,?,?,?,?,?)",
     [
