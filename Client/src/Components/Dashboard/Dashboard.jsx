@@ -20,15 +20,18 @@ const Dashboard = () => {
   useEffect(() => {
     const getMeetingsData = async () => {
       try {
-        var response = await fetch("http://localhost:2000/get-meetings-data", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            user_email: user.email,
-          }),
-        });
+        var response = await fetch(
+          "https://meetease-571g.onrender.com/get-meetings-data",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              user_email: user.email,
+            }),
+          }
+        );
 
         try {
           var data = await response.json();
@@ -44,7 +47,7 @@ const Dashboard = () => {
   }, [meetings]);
 
   const handleDeleteMeeting = async (mid) => {
-    await fetch("http://localhost:2000/delete-meeting", {
+    await fetch("https://meetease-571g.onrender.com/delete-meeting", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -83,7 +86,7 @@ const Dashboard = () => {
                 </Typography>
                 <div className={classes.icons}>
                   <CopyToClipboard
-                    text={`http://localhost:5173/join/${meeting["mid"]}`}
+                    text={`https://meetease.netlify.app/join/${meeting["mid"]}`}
                   >
                     <ShareIcon
                       className={classes.shrMeeting}
@@ -99,7 +102,7 @@ const Dashboard = () => {
 
                   <Link
                     className={classes.editMeetingsLink}
-                    to={`http://localhost:5173/editMeeting/${meeting["mid"]}`}
+                    to={`https://meetease-571g.onrender.com/editMeeting/${meeting["mid"]}`}
                   >
                     <EditNoteIcon
                       className={classes.editMeeting}

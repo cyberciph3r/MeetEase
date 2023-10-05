@@ -9,7 +9,7 @@ import { useAlert } from "react-alert";
 const ShareLink = ({ meetingid }) => {
   const classes = useStyles();
   const alert = useAlert();
-  const url = `http://localhost:5173/join/${meetingid}`;
+  const url = `https://meetease.netlify.app/join/${meetingid}`;
   return (
     <div className={classes.main}>
       <Typography className={classes.title}>
