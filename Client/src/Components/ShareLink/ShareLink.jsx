@@ -6,10 +6,10 @@ import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import { Link } from "react-router-dom";
 import { useAlert } from "react-alert";
 
-const ShareLink = ({ meetingid, meetingDuration, schedulerView }) => {
+const ShareLink = ({ meetingid }) => {
   const classes = useStyles();
   const alert = useAlert();
-  const url = `http://localhost:5173/join/${meetingid}/${schedulerView}/${meetingDuration}`;
+  const url = `http://localhost:5173/join/${meetingid}`;
   return (
     <div className={classes.main}>
       <Typography className={classes.title}>

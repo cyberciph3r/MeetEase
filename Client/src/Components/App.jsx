@@ -17,15 +17,9 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/create" element={<Create />} />
-          <Route
-            path="/join/:id/:view/:slot_duration"
-            element={<UserCalender />}
-          />
+          <Route path="/join/:id" element={<UserCalender />} />
           <Route path="/booked" element={<MeetingConfirmed />} />
-          <Route
-            path="/editMeeting/:id/:view/:slot_duration"
-            element={<UpdateMeeting />}
-          />
+          <Route path="/editMeeting/:id" element={<UpdateMeeting />} />
           <Route path="*" element={<NotFound404 />} />
         </Routes>
       </BrowserRouter>

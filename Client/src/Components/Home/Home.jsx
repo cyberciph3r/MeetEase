@@ -13,7 +13,7 @@ const Home = () => {
   const handleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;
-      var response = await fetch("https://meet-ease.vercel.app/create-token", {
+      var response = await fetch("https://meetease.onrender.com/create-token", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

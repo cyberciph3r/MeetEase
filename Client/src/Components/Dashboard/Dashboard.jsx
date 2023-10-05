@@ -82,7 +82,9 @@ const Dashboard = () => {
                   </span>
                 </Typography>
                 <div className={classes.icons}>
-                  <CopyToClipboard text={meeting["join_link"]}>
+                  <CopyToClipboard
+                    text={`http://localhost:5173/join/${meeting["mid"]}`}
+                  >
                     <ShareIcon
                       className={classes.shrMeeting}
                       onClick={() => {
@@ -97,7 +99,7 @@ const Dashboard = () => {
 
                   <Link
                     className={classes.editMeetingsLink}
-                    to={meeting["join_link"].replace("join", "editMeeting")}
+                    to={`http://localhost:5173/editMeeting/${meeting["mid"]}`}
                   >
                     <EditNoteIcon
                       className={classes.editMeeting}

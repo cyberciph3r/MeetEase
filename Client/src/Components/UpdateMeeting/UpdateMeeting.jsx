@@ -20,23 +20,32 @@ const UpdateMeeting = () => {
   const [meetingName, setMeetingName] = useState("");
   const [meetingFound, setMeetingFound] = useState(false);
   const alert = useAlert();
-  const { id, view, slot_duration } = useParams();
+  const [schedulerView, setSchedulerView] = useState(null);
+  const [slotDuration, setSlotDuration] = useState(null);
+  const [key, setKey] = useState(0);
+  const { id } = useParams();
 
   useEffect(() => {
     getAvailability(id);
     setMeetingID(id);
-  }, []);
+  }, [key]);
+
+  useEffect(() => {
+    setKey(key + 1);
+  }, [schedulerView, slotDuration]);
 
   var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
+  var monthViewBtns = document.getElementsByClassName("e-day");
+  var viewBtns = [...changeViewBtns, ...monthViewBtns];
 
-  for (var btn of changeViewBtns) {
+  for (var btn of viewBtns) {
     btn.addEventListener("click", () => {
       getAvailability(id);
     });
   }
 
   const getAvailability = async (mid) => {
-    var response = await fetch("http://localhost:2000/availability", {
+    var response = await fetch("https://meetease.onrender.com/availability", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -51,6 +60,8 @@ const UpdateMeeting = () => {
       setMeetingFound(true);
       setMeetingName(data[0]["meeting_name"]);
       setTimeSlots(data[0]["date_time_slots"]);
+      setSchedulerView(data[0]["meeting_details"]["scheduler_view"]);
+      setSlotDuration(data[0]["meeting_details"]["slot_duration"]);
       colorCells(data[0]["date_time_slots"]);
     } catch (err) {
       setMeetingFound(false);
@@ -124,7 +135,7 @@ const UpdateMeeting = () => {
 
   const handleSave = async () => {
     try {
-      await fetch("http://localhost:2000/updateTimeslots", {
+      await fetch("https://meetease.onrender.com/updateTimeslots", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -159,6 +170,7 @@ const UpdateMeeting = () => {
         value={meetingName}
       />
       <ScheduleComponent
+        key={key}
         width="100%"
         height="550px"
         workHours={{ highlight: true, start: "00:00", end: "23:59" }}
@@ -166,17 +178,16 @@ const UpdateMeeting = () => {
         eventSettings={{
           dataSource: timeslots,
         }}
-        currentView={view}
+        currentView={schedulerView}
         cellClick={handleCellClick}
         showQuickInfo={false}
         popupOpen={handlePopupOpen}
       >
         <ViewsDirective>
           <ViewDirective
-            option="Week"
-            timeScale={{ enable: true, interval: slot_duration, slotCount: 1 }}
+            option={schedulerView}
+            timeScale={{ enable: true, interval: slotDuration, slotCount: 1 }}
           />
-          <ViewDirective option="Month" />
         </ViewsDirective>
         <Inject services={[Week, Month]} />
       </ScheduleComponent>

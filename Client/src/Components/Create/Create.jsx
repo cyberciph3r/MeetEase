@@ -46,7 +46,7 @@ const Create = () => {
     var createMeeting = async () => {
       try {
         var response = await fetch(
-          "https://meet-ease.vercel.app/create-table",
+          "https://meetease.onrender.com/create-table",
           {
             method: "POST",
             headers: {
@@ -57,8 +57,10 @@ const Create = () => {
               host_name: user.name,
               host_email: user.email,
               timeslots: timeslots,
-              scheduler_view: view,
-              slotDuration: slotDuration,
+              meetingDetails: {
+                scheduler_view: view,
+                slot_duration: slotDuration,
+              },
             }),
           }
         );
@@ -195,11 +197,7 @@ const Create = () => {
           </div>
         </>
       ) : (
-        <ShareLink
-          meetingid={meetingID}
-          meetingDuration={slotDuration}
-          schedulerView={view}
-        />
+        <ShareLink meetingid={meetingID} />
       )}
     </>
   );

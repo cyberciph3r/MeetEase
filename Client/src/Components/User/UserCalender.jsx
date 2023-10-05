@@ -1,7 +1,6 @@
 import React from "react";
 import useStyles from "./styles";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import {
   ScheduleComponent,
   Week,
@@ -11,6 +10,7 @@ import {
   ViewDirective,
 } from "@syncfusion/ej2-react-schedule";
 import { Typography } from "@material-ui/core";
+import { useParams } from "react-router-dom";
 
 const UserCalender = () => {
   const classes = useStyles();
@@ -24,12 +24,19 @@ const UserCalender = () => {
   const [userName, setUserName] = useState("");
   const [userMail, setUserMail] = useState("");
   const [userPhone, setUserPhone] = useState("");
-  const { id, view, slot_duration } = useParams();
+  const [schedulerView, setSchedulerView] = useState(null);
+  const [slotDuration, setSlotDuration] = useState(null);
+  const [key, setKey] = useState(0);
+  const { id } = useParams();
 
   useEffect(() => {
     getAvailability(id);
     setMeetingID(id);
-  }, []);
+  }, [key]);
+
+  useEffect(() => {
+    setKey(key + 1);
+  }, [schedulerView, slotDuration]);
 
   var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
   var monthViewBtns = document.getElementsByClassName("e-day");
@@ -42,7 +49,7 @@ const UserCalender = () => {
   }
 
   const getAvailability = async (mid) => {
-    var response = await fetch("http://localhost:2000/availability", {
+    var response = await fetch("https://meetease.onrender.com/availability", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -57,6 +64,8 @@ const UserCalender = () => {
       setMeetingFound(true);
       setMeetingName(data[0]["meeting_name"]);
       setTimeSlots(data[0]["date_time_slots"]);
+      setSchedulerView(data[0]["meeting_details"]["scheduler_view"]);
+      setSlotDuration(data[0]["meeting_details"]["slot_duration"]);
       setHostName(data[0]["host_name"]);
       setHostMail(data[0]["host_email"]);
       colorCells(data[0]["date_time_slots"]);
@@ -69,12 +78,12 @@ const UserCalender = () => {
     var week_view_slots = document.getElementsByClassName("e-work-hours");
     var month_view_slots = document.getElementsByClassName("e-work-days");
 
-    const headerCells = [...week_view_slots, ...month_view_slots];
+    const slotCells = [...week_view_slots, ...month_view_slots];
 
     const backgroundColor = "greenyellow";
     const textColor = "white";
 
-    for (const cell of headerCells) {
+    for (const cell of slotCells) {
       cell.style.cursor = "pointer";
       var data_date = cell.getAttribute("data-date");
       const timestamp = parseInt(data_date, 10);
@@ -129,28 +138,39 @@ const UserCalender = () => {
 
   const handleNext = async () => {
     try {
-      window.location.replace("http://localhost:5173/booked");
+      window.location.replace("/booked");
 
-      await fetch("http://localhost:2000/create-event-and-update-timeslots", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_name: userName,
-          user_phone: userPhone,
-          user_email: userMail,
-          host_email: hostMail,
-          selectedSlot: selectedSlot,
-          meeting_name: meetingName,
-          meeting_id: meetingID,
-          timeslots: timeslots,
-        }),
-      });
+      await fetch(
+        "https://meetease.onrender.com/create-event-and-update-timeslots",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            user_name: userName,
+            user_phone: userPhone,
+            user_email: userMail,
+            host_email: hostMail,
+            selectedSlot: selectedSlot,
+            meeting_name: meetingName,
+            meeting_id: meetingID,
+            timeslots: timeslots,
+          }),
+        }
+      );
     } catch (error) {
       console.log("Error:", error);
     }
   };
+
+  if (schedulerView == null) {
+    return (
+      <div className={classes.main}>
+        <Typography className={classes.title}>Loading...</Typography>
+      </div>
+    );
+  }
   return (
     <>
       {meetingFound ? (
@@ -174,21 +194,20 @@ const UserCalender = () => {
                 eventSettings={{
                   dataSource: timeslots,
                 }}
-                currentView={view}
+                currentView={schedulerView}
                 cellClick={handleCellClick}
                 showQuickInfo={false}
                 popupOpen={handlePopupOpen}
               >
                 <ViewsDirective>
                   <ViewDirective
-                    option="Week"
+                    option={schedulerView}
                     timeScale={{
                       enable: true,
-                      interval: slot_duration,
+                      interval: slotDuration,
                       slotCount: 1,
                     }}
                   />
-                  <ViewDirective option="Month" />
                 </ViewsDirective>
                 <Inject services={[Week, Month]} />
               </ScheduleComponent>

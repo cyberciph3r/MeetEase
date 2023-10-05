@@ -63,7 +63,7 @@ app.post("/get-meetings-data", (req, res) => {
       }
       if (table.length > 0) {
         db.query(
-          "SELECT mid,meeting_name,date_created,join_link FROM meetings WHERE host_email=? ORDER BY id DESC",
+          "SELECT mid,meeting_name,date_created,meeting_details FROM meetings WHERE host_email=? ORDER BY id DESC",
           [user_email],
           (err, data) => {
             if (err) {
@@ -82,7 +82,7 @@ app.post("/get-meetings-data", (req, res) => {
 
 app.post("/create-table", (req, res) => {
   const createTableQ =
-    "CREATE TABLE IF NOT EXISTS meetings(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,mid VARCHAR(255),host_name VARCHAR(255),host_email VARCHAR(255),meeting_name VARCHAR(255),date_created VARCHAR(255),date_time_slots JSON,join_link VARCHAR(255))";
+    "CREATE TABLE IF NOT EXISTS meetings(id int NOT NULL AUTO_INCREMENT PRIMARY KEY,mid VARCHAR(255),host_name VARCHAR(255),host_email VARCHAR(255),meeting_name VARCHAR(255),date_created VARCHAR(255),date_time_slots JSON,meeting_details JSON)";
 
   db.query(createTableQ, (err, _) => {
     if (err) {
@@ -92,20 +92,13 @@ app.post("/create-table", (req, res) => {
     console.log("Meetings Table is created!");
   });
 
-  const {
-    meeting_name,
-    host_name,
-    host_email,
-    timeslots,
-    scheduler_view,
-    slotDuration,
-  } = req.body;
+  const { meeting_name, host_name, host_email, timeslots, meetingDetails } =
+    req.body;
 
   var date_created = new Date().toLocaleString();
   var meetingID = uuidv4();
-  var join_link = `https://meetease.netlify.app/join/${meetingID}/${scheduler_view}/${slotDuration}`;
   db.query(
-    "INSERT INTO meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,join_link) VALUES (?,?,?,?,?,?,?)",
+    "INSERT INTO meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,meeting_details) VALUES (?,?,?,?,?,?,?)",
     [
       meetingID,
       host_name,
@@ -113,7 +106,7 @@ app.post("/create-table", (req, res) => {
       meeting_name,
       date_created,
       JSON.stringify(timeslots),
-      join_link,
+      JSON.stringify(meetingDetails),
     ],
     (err, _) => {
       if (err) {
@@ -128,7 +121,7 @@ app.post("/create-table", (req, res) => {
 app.post("/availability", (req, res) => {
   const { meeting_id } = req.body;
   db.query(
-    "SELECT meeting_name,host_name,host_email,date_time_slots FROM meetings WHERE mid = ?",
+    "SELECT meeting_name,host_name,host_email,date_time_slots,meeting_details FROM meetings WHERE mid = ?",
     [meeting_id],
     (err, data) => {
       if (err) {
