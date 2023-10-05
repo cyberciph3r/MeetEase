@@ -102,7 +102,7 @@ const Dashboard = () => {
 
                   <Link
                     className={classes.editMeetingsLink}
-                    to={`https://meetease-571g.onrender.com/editMeeting/${meeting["mid"]}`}
+                    to={`https://meetease.netlify.app/editMeeting/${meeting["mid"]}`}
                   >
                     <EditNoteIcon
                       className={classes.editMeeting}
