@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import useStyles from "./styles";
 import { Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -9,6 +9,14 @@ import useStore from "../Zustand/zustand";
 const Home = () => {
   const classes = useStyles();
   const { user, login, logout } = useStore();
+
+  useEffect(() => {
+    const wakeServer = async () => {
+      await fetch("https://meetease-571g.onrender.com");
+      await fetch("https://meetease-571g.onrender.com/availability");
+    };
+    wakeServer();
+  });
 
   const handleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {

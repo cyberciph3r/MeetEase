@@ -49,7 +49,11 @@ db.connect((err) => {
 // });
 
 app.get("/", (req, res) => {
-  res.send("Hello");
+  res.send("Hello World");
+});
+
+app.get("/availability", (req, res) => {
+  res.send("Hello World");
 });
 
 app.post("/get-meetings-data", (req, res) => {
