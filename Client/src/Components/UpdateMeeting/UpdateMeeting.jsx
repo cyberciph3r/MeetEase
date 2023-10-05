@@ -45,15 +45,18 @@ const UpdateMeeting = () => {
   }
 
   const getAvailability = async (mid) => {
-    var response = await fetch("https://meetease.onrender.com/availability", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        meeting_id: mid,
-      }),
-    });
+    var response = await fetch(
+      "https://meetease-571g.onrender.com/availability",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          meeting_id: mid,
+        }),
+      }
+    );
 
     try {
       var data = await response.json();
@@ -135,7 +138,7 @@ const UpdateMeeting = () => {
 
   const handleSave = async () => {
     try {
-      await fetch("https://meetease.onrender.com/updateTimeslots", {
+      await fetch("https://meetease-571g.onrender.com/updateTimeslots", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

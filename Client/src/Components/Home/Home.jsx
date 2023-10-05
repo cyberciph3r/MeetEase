@@ -13,15 +13,18 @@ const Home = () => {
   const handleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;
-      var response = await fetch("https://meetease.onrender.com/create-token", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          code: code,
-        }),
-      });
+      var response = await fetch(
+        "https://meetease-571g.onrender.com/create-token",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            code: code,
+          }),
+        }
+      );
 
       try {
         var data = await response.json();

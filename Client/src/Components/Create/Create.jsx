@@ -46,7 +46,7 @@ const Create = () => {
     var createMeeting = async () => {
       try {
         var response = await fetch(
-          "https://meetease.onrender.com/create-table",
+          "https://meetease-571g.onrender.com/create-table",
           {
             method: "POST",
             headers: {

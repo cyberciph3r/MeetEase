@@ -49,15 +49,18 @@ const UserCalender = () => {
   }
 
   const getAvailability = async (mid) => {
-    var response = await fetch("https://meetease.onrender.com/availability", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        meeting_id: mid,
-      }),
-    });
+    var response = await fetch(
+      "https://meetease-571g.onrender.com/availability",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          meeting_id: mid,
+        }),
+      }
+    );
 
     try {
       var data = await response.json();
@@ -141,7 +144,7 @@ const UserCalender = () => {
       window.location.replace("/booked");
 
       await fetch(
-        "https://meetease.onrender.com/create-event-and-update-timeslots",
+        "https://meetease-571g.onrender.com/create-event-and-update-timeslots",
         {
           method: "POST",
           headers: {
