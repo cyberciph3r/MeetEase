@@ -6,7 +6,7 @@
 
 - Utilized Express.js and Node.js to drive the backend, managing routing and establishing RESTful API endpoints.
 
-- Created a responsive and visually appealing frontend using React and Material-UI, enhancing the user experience.
+- Developed a responsive, visually appealing, and user-friendly frontend using React, enhanced with the Material UI library.
 
 - Integrated Google Authentication for heightened security and the acquisition of user information.
 
