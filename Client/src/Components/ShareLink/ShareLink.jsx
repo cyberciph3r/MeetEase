@@ -9,14 +9,17 @@ import { useAlert } from "react-alert";
 const ShareLink = ({ meetingid }) => {
   const classes = useStyles();
   const alert = useAlert();
-  const url = `https://meetease.netlify.app/join/${meetingid}`;
+  const url = `meetease.netlify.app/join/${meetingid}`;
   return (
     <div className={classes.main}>
       <Typography className={classes.title}>
-        Meeting created! You can share the below link with your users
+        Your meeting is ready to share!
+      </Typography>
+      <Typography className={classes.subtitle}>
+        Paste this link in a message to invite them to pick times.
       </Typography>
       <div className={classes.linkDiv}>
-        <Typography className={classes.copyFld}>{url}</Typography>
+        <input className={classes.txtFld} value={url} readOnly />
         <CopyToClipboard text={url}>
           <ContentCopyIcon
             className={classes.copyBtn}
@@ -27,7 +30,7 @@ const ShareLink = ({ meetingid }) => {
         </CopyToClipboard>
       </div>
       <Link to="/" className={classes.bth}>
-        <Typography className={classes.bthText}>Back to Home</Typography>
+        <Typography className={classes.bthText}>Home</Typography>
       </Link>
     </div>
   );

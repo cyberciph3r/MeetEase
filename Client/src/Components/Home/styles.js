@@ -5,7 +5,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     height: "100vh",
     width: "100%",
-    background: "linear-gradient(90deg,#FF416C,#FF4B2B)",
+    background: "linear-gradient(135deg,#FF416C,#203A43,#0F2027)",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",

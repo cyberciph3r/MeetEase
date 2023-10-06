@@ -5,32 +5,52 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     height: "100vh",
     width: "100%",
-    background: "linear-gradient(90deg,#FF416C,#FF4B2B)",
-    flexDirection: "column",
+    background: "linear-gradient(90deg,#0F2027,#203A43)",
+    color: "white",
     justifyContent: "center",
-    alignItems: "center",
+    flexDirection: "column",
+    padding: "2rem",
     boxSizing: "border-box",
     [theme.breakpoints.down("xs")]: {
       padding: "1rem",
     },
   },
   title: {
-    color: "white",
-    fontSize: "2rem",
+    fontSize: "4rem",
+    fontFamily: "Montserrat",
+    fontWeight: "bolder",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "2rem",
+    },
     [theme.breakpoints.down("xs")]: {
-      fontSize: "1rem",
+      fontSize: "1.2rem",
+    },
+  },
+  subtitle: {
+    fontSize: "1rem",
+    fontFamily: "Montserrat",
+    [theme.breakpoints.down("sm")]: {
+      fontSize: "0.8rem",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.6rem",
     },
   },
   linkDiv: {
     display: "flex",
     gap: "1rem",
   },
-  copyFld: {
-    backgroundColor: "white",
-    color: "black",
-    padding: "0.5rem",
+  txtFld: {
+    width: "50%",
+    outline: "none",
+    border: "none",
     borderRadius: "5px",
-    fontSize: "1rem",
+    marginTop: "0.5rem",
+    padding: "0.5rem",
+    fontSize: "1.2rem",
+    [theme.breakpoints.down("sm")]: {
+      width: "80%",
+    },
     [theme.breakpoints.down("xs")]: {
       fontSize: "0.8rem",
     },
@@ -41,6 +61,7 @@ const useStyles = makeStyles((theme) => ({
     cursor: "pointer",
     border: "none",
     padding: "0.5rem",
+    marginTop: "0.5rem",
     borderRadius: "5px",
     "&:hover": {
       backgroundColor: "black",
@@ -48,12 +69,13 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   bth: {
+    width: "fit-content",
     textDecoration: "none",
     backgroundColor: "black",
     color: "white",
     transition: "0.3s",
     borderRadius: "50px",
-    margin: "1rem",
+    marginTop: "1rem",
     padding: "0.5rem",
     cursor: "pointer",
     border: "none",
