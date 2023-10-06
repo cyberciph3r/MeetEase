@@ -4,7 +4,7 @@
 
 - Utilized MySQL to securely store and manage appointment details and user data, enabling CRUD operations on appointments.
 
-- Leveraged Express.js and Node.js to power the backend, handling routing and creating RESTful API endpoints for efficient communication with the frontend.
+- Utilized Express.js and Node.js to drive the backend, managing routing and establishing RESTful API endpoints.
 
 - Created a responsive and visually appealing frontend using React and Material-UI, enhancing the user experience.
 
