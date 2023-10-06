@@ -2,7 +2,7 @@
 
 - A full-stack web application that empowers users to seamlessly create and manage appointments.
 
-- Utilized MySQL to securely store and manage appointment details and user data.
+- Utilized MySQL to securely store and manage appointment details and user data, enabling CRUD operations on appointments.
 
 - Leveraged Express.js and Node.js to power the backend, handling routing and creating RESTful API endpoints for efficient communication with the frontend.
 
