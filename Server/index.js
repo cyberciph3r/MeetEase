@@ -95,7 +95,10 @@ app.post("/create-table", (req, res) => {
   const { meeting_name, host_name, host_email, timeslots, meetingDetails } =
     req.body;
 
-  var date_created = new Date().toLocaleString();
+  var date_created = new Date().toLocaleString(undefined, {
+    timeZone: "Asia/Kolkata",
+  });
+
   var meetingID = uuidv4();
   db.query(
     "INSERT INTO meetings (mid,host_name,host_email,meeting_name,date_created,date_time_slots,meeting_details) VALUES (?,?,?,?,?,?,?)",
