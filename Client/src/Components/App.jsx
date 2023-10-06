@@ -8,6 +8,7 @@ import MeetingConfirmed from "./MeetingConfirmed/MeetingConfirmed";
 import Dashboard from "./Dashboard/Dashboard";
 import UpdateMeeting from "./UpdateMeeting/UpdateMeeting";
 import NotFound404 from "./NotFound404/NotFound404";
+import PrivacyPolicy from "./Privacy Policy/PrivacyPolicy";
 
 const App = () => {
   return (
@@ -20,6 +21,7 @@ const App = () => {
           <Route path="/join/:id" element={<UserCalender />} />
           <Route path="/booked" element={<MeetingConfirmed />} />
           <Route path="/editMeeting/:id" element={<UpdateMeeting />} />
+          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound404 />} />
         </Routes>
       </BrowserRouter>
