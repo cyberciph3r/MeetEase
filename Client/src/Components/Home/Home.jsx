@@ -10,14 +10,6 @@ const Home = () => {
   const classes = useStyles();
   const { user, login, logout } = useStore();
 
-  useEffect(() => {
-    const wakeServer = async () => {
-      await fetch("https://meetease-571g.onrender.com");
-      await fetch("https://meetease-571g.onrender.com/availability");
-    };
-    wakeServer();
-  });
-
   const handleLogin = useGoogleLogin({
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;

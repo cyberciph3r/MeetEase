@@ -8,14 +8,16 @@ const useStyles = makeStyles((theme) => ({
     background: "linear-gradient(90deg,#FF416C,#FF4B2B)",
     flexDirection: "column",
     padding: "4rem",
-    paddingTop: "1rem",
+    paddingTop: "5rem",
     boxSizing: "border-box",
     overflow: "auto",
     [theme.breakpoints.down("sm")]: {
       padding: "2rem",
+      paddingTop: "5rem",
     },
     [theme.breakpoints.down("xs")]: {
       padding: "1rem",
+      paddingTop: "4rem",
     },
   },
   meetingCard: {

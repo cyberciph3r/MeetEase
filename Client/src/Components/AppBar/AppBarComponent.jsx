@@ -8,7 +8,7 @@ const AppBarComponent = () => {
   const { logout } = useStore();
 
   return (
-    <AppBar position="sticky">
+    <AppBar position="fixed">
       <Toolbar className={classes.appBar}>
         <Link to="/" className={classes.logo}>
           MeetEase
