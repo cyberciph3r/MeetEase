@@ -11,3 +11,5 @@
 - Integrated Google Authentication for heightened security and the acquisition of user information.
 
 - Integrated Google Calendar API to automate event creation in hosts' calendars upon appointment bookings, with email notifications sent to both hosts and users for event updates.
+
+Live website- https://meetease.netlify.app/
