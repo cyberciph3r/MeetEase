@@ -23,6 +23,7 @@ const UpdateMeeting = () => {
   const [schedulerView, setSchedulerView] = useState(null);
   const [slotDuration, setSlotDuration] = useState(null);
   const [key, setKey] = useState(0);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
@@ -70,6 +71,8 @@ const UpdateMeeting = () => {
       setMeetingFound(false);
       console.log("Error:", err);
     }
+
+    setLoading(false);
   };
   const colorCells = (data) => {
     const week_view = document.getElementsByClassName("e-work-hours");
@@ -153,6 +156,14 @@ const UpdateMeeting = () => {
       console.log(error);
     }
   };
+
+  if (loading) {
+    return (
+      <div className={classes.main}>
+        <Typography className={classes.title}>Loading...</Typography>
+      </div>
+    );
+  }
 
   if (!meetingFound) {
     return (

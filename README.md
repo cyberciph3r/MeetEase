@@ -1,13 +1,15 @@
 # MeetEase
 
-- A full-stack web application that empowers users to seamlessly create and manage appointments.
+A full-stack web application that empowers users to seamlessly create and manage appointments.
 
-- Utilized MySQL for secure storage and efficient management of appointment details and user data.
+Utilized MySQL to securely store and manage appointment details and user data, enabling CRUD operations on appointments.
 
-- Leveraged Express.js and Node.js to power the backend, handling routing and creating RESTful API endpoints for efficient communication with the frontend.
+Utilized Express.js and Node.js to drive the backend, managing routing and establishing RESTful API endpoints.
 
-- Created a responsive and visually appealing frontend using React and Material-UI, enhancing the overall user experience.
+Developed a responsive, visually appealing, and user-friendly frontend using React, enhanced with the Material UI library.
 
-- Integrated Google Authentication for heightened security and the acquisition of user information.
+Integrated Google Authentication for heightened security and the acquisition of user information.
 
-- Integrated Google Calendar API to automate event creation in hosts' calendars upon appointment bookings, with email notifications sent to both hosts and users for event updates.
+Integrated Google Calendar API to automate event creation in hosts' Google Calendar upon appointment bookings, with email notifications sent to both hosts and users for event updates.
+
+Live website- https://meetease.netlify.app/

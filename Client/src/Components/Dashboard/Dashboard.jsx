@@ -15,6 +15,7 @@ const Dashboard = () => {
   const classes = useStyles();
   const { user } = useStore();
   const [meetings, setMeetings] = useState([]);
+  const [loading, setLoading] = useState(true);
   const alert = useAlert();
 
   useEffect(() => {
@@ -42,6 +43,8 @@ const Dashboard = () => {
       } catch (error) {
         console.log("Error:", error);
       }
+
+      setLoading(false);
     };
     getMeetingsData();
   }, [meetings]);
@@ -60,6 +63,14 @@ const Dashboard = () => {
 
   if (user == null) {
     return <BackHome />;
+  }
+
+  if (loading) {
+    return (
+      <div className={classes.main}>
+        <Typography className={classes.title}>Loading...</Typography>
+      </div>
+    );
   }
   return (
     <>
