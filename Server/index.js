@@ -9,20 +9,17 @@ require("dotenv").config();
 
 app.use(
   cors({
-    origin: "*",
+    origin: process.env.FRONTED_URL,
   })
 );
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const google_client_id = process.env.GOOGLE_CLIENT_ID;
-const google_client_secret = process.env.GOOGLE_CLIENT_SECRET;
-
 const oauth2Client = new google.auth.OAuth2(
-  google_client_id,
-  google_client_secret,
-  "https://meetease.netlify.app"
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  process.env.FRONTED_URL
 );
 
 const db = mysql.createConnection({

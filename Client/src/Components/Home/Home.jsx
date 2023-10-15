@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import useStyles from "./styles";
 import { Toolbar, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
@@ -14,7 +14,7 @@ const Home = () => {
     onSuccess: async (codeResponse) => {
       var code = codeResponse.code;
       var response = await fetch(
-        "https://meetease-571g.onrender.com/create-token",
+        `${import.meta.env.VITE_BACKEND_URL}/create-token`,
         {
           method: "POST",
           headers: {
@@ -32,6 +32,9 @@ const Home = () => {
       } catch (error) {
         console.log(error);
       }
+    },
+    onError: () => {
+      console.log("Error");
     },
     flow: "auth-code",
     scope: "openid email profile https://www.googleapis.com/auth/calendar",

@@ -14,7 +14,6 @@ import { useParams } from "react-router-dom";
 
 const UserCalender = () => {
   const classes = useStyles();
-  const [meetingID, setMeetingID] = useState(null);
   const [timeslots, setTimeSlots] = useState([]);
   const [meetingName, setMeetingName] = useState("");
   const [hostName, setHostName] = useState("");
@@ -26,31 +25,28 @@ const UserCalender = () => {
   const [userPhone, setUserPhone] = useState("");
   const [schedulerView, setSchedulerView] = useState(null);
   const [slotDuration, setSlotDuration] = useState(null);
-  const [key, setKey] = useState(0);
+  const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     getAvailability(id);
-    setMeetingID(id);
-  }, [key]);
-
-  useEffect(() => {
-    setKey(key + 1);
-  }, [schedulerView, slotDuration]);
+  }, []);
 
   var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
-  var monthViewBtns = document.getElementsByClassName("e-day");
+  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
   var viewBtns = [...changeViewBtns, ...monthViewBtns];
 
   for (var btn of viewBtns) {
     btn.addEventListener("click", () => {
-      getAvailability(id);
+      setTimeout(() => {
+        colorCells(timeslots);
+      }, 400);
     });
   }
 
   const getAvailability = async (mid) => {
     var response = await fetch(
-      "https://meetease-571g.onrender.com/availability",
+      `${import.meta.env.VITE_BACKEND_URL}/availability`,
       {
         method: "POST",
         headers: {
@@ -76,15 +72,14 @@ const UserCalender = () => {
       setMeetingFound(false);
       console.log("Error:", err);
     }
+
+    setLoading(false);
   };
   const colorCells = (data) => {
     var week_view_slots = document.getElementsByClassName("e-work-hours");
     var month_view_slots = document.getElementsByClassName("e-work-days");
 
     const slotCells = [...week_view_slots, ...month_view_slots];
-
-    const backgroundColor = "greenyellow";
-    const textColor = "white";
 
     for (const cell of slotCells) {
       cell.style.cursor = "pointer";
@@ -102,8 +97,7 @@ const UserCalender = () => {
           new Date(slot.startTime).toLocaleString() == date.toLocaleString()
       );
       if (isAvailable) {
-        cell.style.backgroundColor = backgroundColor;
-        cell.style.color = textColor;
+        cell.style.backgroundColor = "greenyellow";
       } else {
         cell.style.backgroundColor = "grey";
       }
@@ -112,16 +106,12 @@ const UserCalender = () => {
 
   const handleCellClick = async (args) => {
     var cell = args.element;
+
     if (cell.style.backgroundColor != "greenyellow") {
       alert("Slot not available!!");
       return;
     }
     cell.style.cursor = "pointer";
-    if (cell.style.backgroundColor == "greenyellow") {
-      cell.style.backgroundColor = "lightblue";
-    } else if (cell.style.backgroundColor == "lightblue") {
-      cell.style.backgroundColor = "greenyellow";
-    }
 
     const startTime = new Date(args.startTime);
     const endTime = new Date(args.endTime);
@@ -135,6 +125,7 @@ const UserCalender = () => {
     });
     setTimeSlots(temp);
   };
+
   const handlePopupOpen = (args) => {
     args.cancel = true;
   };
@@ -144,7 +135,7 @@ const UserCalender = () => {
       window.location.replace("/booked");
 
       await fetch(
-        "https://meetease-571g.onrender.com/create-event-and-update-timeslots",
+        `${import.meta.env.VITE_BACKEND_URL}/create-event-and-update-timeslots`,
         {
           method: "POST",
           headers: {
@@ -157,7 +148,7 @@ const UserCalender = () => {
             host_email: hostMail,
             selectedSlot: selectedSlot,
             meeting_name: meetingName,
-            meeting_id: meetingID,
+            meeting_id: id,
             timeslots: timeslots,
           }),
         }
@@ -167,7 +158,7 @@ const UserCalender = () => {
     }
   };
 
-  if (schedulerView == null) {
+  if (loading) {
     return (
       <div className={classes.main}>
         <Typography className={classes.title}>Loading...</Typography>

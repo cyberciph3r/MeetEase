@@ -1,6 +1,6 @@
 import { makeStyles } from "@material-ui/core";
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles((theme) => ({
   main: {
     display: "flex",
     height: "100vh",
@@ -24,19 +24,36 @@ const useStyles = makeStyles(() => ({
     borderRadius: "5px",
     padding: "1rem",
     fontSize: "1.2rem",
+    [theme.breakpoints.down("xs")]: {
+      padding: "0.8rem",
+      fontSize: "0.8rem",
+    },
   },
-  saveBtn: {
+  btnsDiv: {
+    display: "flex",
+  },
+  cnlLink: {
     textDecoration: "none",
+    color: "red",
     backgroundColor: "black",
-    color: "white",
-    transition: "0.3s",
     borderRadius: "50px",
-    padding: "0.4rem",
-    margin: "0.5rem",
+    transition: "0.3s",
+    margin: "1rem",
     cursor: "pointer",
     "&:hover": {
       backgroundColor: "white",
-      color: "#FF464B",
+    },
+  },
+  svLink: {
+    textDecoration: "none",
+    color: "greenyellow",
+    backgroundColor: "black",
+    borderRadius: "50px",
+    transition: "0.3s",
+    margin: "1rem",
+    cursor: "pointer",
+    "&:hover": {
+      color: "white",
     },
   },
 }));

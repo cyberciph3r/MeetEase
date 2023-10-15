@@ -12,6 +12,8 @@ import {
 } from "@syncfusion/ej2-react-schedule";
 import { Typography } from "@material-ui/core";
 import { useAlert } from "react-alert";
+import CancelIcon from "@mui/icons-material/Cancel";
+import DoneIcon from "@mui/icons-material/Done";
 
 const UpdateMeeting = () => {
   const classes = useStyles();
@@ -22,32 +24,29 @@ const UpdateMeeting = () => {
   const alert = useAlert();
   const [schedulerView, setSchedulerView] = useState(null);
   const [slotDuration, setSlotDuration] = useState(null);
-  const [key, setKey] = useState(0);
   const [loading, setLoading] = useState(true);
   const { id } = useParams();
 
   useEffect(() => {
     getAvailability(id);
     setMeetingID(id);
-  }, [key]);
-
-  useEffect(() => {
-    setKey(key + 1);
-  }, [schedulerView, slotDuration]);
+  }, []);
 
   var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
-  var monthViewBtns = document.getElementsByClassName("e-day");
+  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
   var viewBtns = [...changeViewBtns, ...monthViewBtns];
 
   for (var btn of viewBtns) {
     btn.addEventListener("click", () => {
-      getAvailability(id);
+      setTimeout(() => {
+        colorCells(timeslots);
+      }, 400);
     });
   }
 
   const getAvailability = async (mid) => {
     var response = await fetch(
-      "https://meetease-571g.onrender.com/availability",
+      `${import.meta.env.VITE_BACKEND_URL}/availability`,
       {
         method: "POST",
         headers: {
@@ -79,9 +78,6 @@ const UpdateMeeting = () => {
     const month_view = document.getElementsByClassName("e-work-days");
     const headerCells = [...week_view, ...month_view];
 
-    const backgroundColor = "greenyellow";
-    const textColor = "white";
-
     for (const cell of headerCells) {
       cell.style.cursor = "pointer";
       var data_date = cell.getAttribute("data-date");
@@ -98,8 +94,7 @@ const UpdateMeeting = () => {
           new Date(slot.startTime).toLocaleString() == date.toLocaleString()
       );
       if (isAvailable) {
-        cell.style.backgroundColor = backgroundColor;
-        cell.style.color = textColor;
+        cell.style.backgroundColor = "greenyellow";
       } else {
         cell.style.backgroundColor = "white";
       }
@@ -141,7 +136,7 @@ const UpdateMeeting = () => {
 
   const handleSave = async () => {
     try {
-      await fetch("https://meetease-571g.onrender.com/updateTimeslots", {
+      await fetch(`${import.meta.env.VITE_BACKEND_URL}/updateTimeslots`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -184,7 +179,6 @@ const UpdateMeeting = () => {
         value={meetingName}
       />
       <ScheduleComponent
-        key={key}
         width="100%"
         height="550px"
         workHours={{ highlight: true, start: "00:00", end: "23:59" }}
@@ -205,16 +199,35 @@ const UpdateMeeting = () => {
         </ViewsDirective>
         <Inject services={[Week, Month]} />
       </ScheduleComponent>
-      <Link
-        to="/dashboard"
-        className={classes.saveBtn}
-        onClick={() => {
-          handleSave();
-          alert.success("Saved!");
-        }}
-      >
-        <Typography>Save</Typography>
-      </Link>
+      <div className={classes.btnsDiv}>
+        <Link
+          to="/dashboard"
+          onClick={() => {
+            alert.success("No changes made!");
+          }}
+        >
+          <CancelIcon
+            style={{
+              fontSize: "2rem",
+            }}
+            className={classes.cnlLink}
+          />
+        </Link>
+        <Link
+          to="/dashboard"
+          onClick={() => {
+            handleSave();
+            alert.success("Saved!");
+          }}
+        >
+          <DoneIcon
+            style={{
+              fontSize: "2rem",
+            }}
+            className={classes.svLink}
+          />
+        </Link>
+      </div>
     </div>
   );
 };

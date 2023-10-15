@@ -26,7 +26,6 @@ const Create = () => {
   const { user } = useStore();
 
   useEffect(() => {
-    setView("Week");
     var btns = document.getElementsByClassName("e-tbar-btn-text");
     for (var btn of btns) {
       if (btn.textContent == "Week") {
@@ -40,13 +39,13 @@ const Create = () => {
         });
       }
     }
-  }, [key]);
+  }, []);
 
   const handleNext = () => {
     var createMeeting = async () => {
       try {
         var response = await fetch(
-          "https://meetease-571g.onrender.com/create-table",
+          `${import.meta.env.VITE_BACKEND_URL}/create-table`,
           {
             method: "POST",
             headers: {
@@ -80,11 +79,6 @@ const Create = () => {
   };
 
   const handleCellClick = (args) => {
-    args.element.style.backgroundColor =
-      args.element.style.backgroundColor == "greenyellow"
-        ? "white"
-        : "greenyellow";
-
     const startTime = new Date(args.startTime);
     const endTime = new Date(args.endTime);
 
@@ -107,6 +101,52 @@ const Create = () => {
     }
     // console.log(timeslots);
   };
+
+  useEffect(() => {
+    colorCells(timeslots);
+  }, [timeslots]);
+
+  var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
+  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
+  var viewBtns = [...changeViewBtns, ...monthViewBtns];
+
+  for (var btn of viewBtns) {
+    btn.addEventListener("click", () => {
+      setTimeout(() => {
+        colorCells(timeslots);
+      }, 400);
+    });
+  }
+
+  const colorCells = (data) => {
+    var week_view_slots = document.getElementsByClassName("e-work-hours");
+    var month_view_slots = document.getElementsByClassName("e-work-days");
+
+    const slotCells = [...week_view_slots, ...month_view_slots];
+
+    for (const cell of slotCells) {
+      cell.style.cursor = "pointer";
+      var data_date = cell.getAttribute("data-date");
+      const timestamp = parseInt(data_date, 10);
+      var date = new Date(timestamp);
+      // console.log(date.toLocaleString());
+
+      if (data == null) {
+        return;
+      }
+
+      const isAvailable = data.some(
+        (slot) =>
+          new Date(slot.startTime).toLocaleString() == date.toLocaleString()
+      );
+      if (isAvailable) {
+        cell.style.backgroundColor = "greenyellow";
+      } else {
+        cell.style.backgroundColor = "white";
+      }
+    }
+  };
+
   const handlePopupOpen = (args) => {
     args.cancel = true;
   };
@@ -141,6 +181,7 @@ const Create = () => {
                   className={classes.durationBtn}
                   onClick={() => {
                     setKey(key + 1);
+                    setView("Week");
                   }}
                 >
                   OK

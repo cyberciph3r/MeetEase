@@ -1,10 +1,9 @@
 import React from "react";
 import useStyles from "./styles";
-import { Button, Typography } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
-const NotFound404 = ({ meetingid }) => {
+const NotFound404 = () => {
   const classes = useStyles();
-  const url = "http://localhost:5173/join/" + meetingid;
   return (
     <div className={classes.main}>
       <Typography className={classes.title}>404</Typography>

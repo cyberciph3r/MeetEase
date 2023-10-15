@@ -22,7 +22,7 @@ const Dashboard = () => {
     const getMeetingsData = async () => {
       try {
         var response = await fetch(
-          "https://meetease-571g.onrender.com/get-meetings-data",
+          `${import.meta.env.VITE_BACKEND_URL}/get-meetings-data`,
           {
             method: "POST",
             headers: {
@@ -50,7 +50,7 @@ const Dashboard = () => {
   }, [meetings]);
 
   const handleDeleteMeeting = async (mid) => {
-    await fetch("https://meetease-571g.onrender.com/delete-meeting", {
+    await fetch(`${import.meta.env.VITE_BACKEND_URL}/delete-meeting`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,9 @@ const Dashboard = () => {
                 </Typography>
                 <div className={classes.icons}>
                   <CopyToClipboard
-                    text={`https://meetease.netlify.app/join/${meeting["mid"]}`}
+                    text={`${import.meta.env.VITE_FRONTEND_URL}/join/${
+                      meeting["mid"]
+                    }`}
                   >
                     <ShareIcon
                       className={classes.shrMeeting}
@@ -113,7 +115,9 @@ const Dashboard = () => {
 
                   <Link
                     className={classes.editMeetingsLink}
-                    to={`https://meetease.netlify.app/editMeeting/${meeting["mid"]}`}
+                    to={`${import.meta.env.VITE_FRONTEND_URL}/editMeeting/${
+                      meeting["mid"]
+                    }`}
                   >
                     <EditNoteIcon
                       className={classes.editMeeting}
