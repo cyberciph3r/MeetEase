@@ -32,17 +32,38 @@ const UserCalender = () => {
     getAvailability(id);
   }, []);
 
-  var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
-  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
-  var viewBtns = [...changeViewBtns, ...monthViewBtns];
+  useEffect(() => {
+    colorCells(timeslots);
+  }, [timeslots]);
 
-  for (var btn of viewBtns) {
-    btn.addEventListener("click", () => {
-      setTimeout(() => {
+  setTimeout(() => {
+    var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
+    for (var btn of changeViewBtns) {
+      btn.addEventListener("click", () => {
+        setTimeout(() => {
+          colorCells(timeslots);
+          var miniCalenderBtns = document.getElementsByClassName("e-calendar");
+          for (var btn of miniCalenderBtns) {
+            btn.addEventListener("click", () => {
+              setTimeout(() => {
+                colorCells(timeslots);
+              }, 400);
+            });
+          }
+        }, 400);
+      });
+    }
+  }, 400);
+
+  setTimeout(() => {
+    var calendarContainer =
+      document.getElementsByClassName("e-table-container");
+    for (var ele of calendarContainer) {
+      ele.addEventListener("touchend", (e) => {
         colorCells(timeslots);
-      }, 400);
-    });
-  }
+      });
+    }
+  }, 400);
 
   const getAvailability = async (mid) => {
     var response = await fetch(
@@ -75,6 +96,7 @@ const UserCalender = () => {
 
     setLoading(false);
   };
+
   const colorCells = (data) => {
     var week_view_slots = document.getElementsByClassName("e-work-hours");
     var month_view_slots = document.getElementsByClassName("e-work-days");

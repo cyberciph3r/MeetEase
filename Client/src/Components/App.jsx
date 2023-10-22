@@ -21,7 +21,6 @@ const App = () => {
           <Route path="/join/:id" element={<UserCalender />} />
           <Route path="/booked" element={<MeetingConfirmed />} />
           <Route path="/editMeeting/:id" element={<UpdateMeeting />} />
-          <Route path="/privacypolicy" element={<PrivacyPolicy />} />
           <Route path="*" element={<NotFound404 />} />
         </Routes>
       </BrowserRouter>

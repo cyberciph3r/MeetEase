@@ -32,17 +32,38 @@ const UpdateMeeting = () => {
     setMeetingID(id);
   }, []);
 
-  var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
-  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
-  var viewBtns = [...changeViewBtns, ...monthViewBtns];
+  useEffect(() => {
+    colorCells(timeslots);
+  }, [timeslots]);
 
-  for (var btn of viewBtns) {
-    btn.addEventListener("click", () => {
-      setTimeout(() => {
+  setTimeout(() => {
+    var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
+    for (var btn of changeViewBtns) {
+      btn.addEventListener("click", () => {
+        setTimeout(() => {
+          colorCells(timeslots);
+          var miniCalenderBtns = document.getElementsByClassName("e-calendar");
+          for (var btn of miniCalenderBtns) {
+            btn.addEventListener("click", () => {
+              setTimeout(() => {
+                colorCells(timeslots);
+              }, 400);
+            });
+          }
+        }, 400);
+      });
+    }
+  }, 400);
+
+  setTimeout(() => {
+    var calendarContainer =
+      document.getElementsByClassName("e-table-container");
+    for (var ele of calendarContainer) {
+      ele.addEventListener("touchend", (e) => {
         colorCells(timeslots);
-      }, 400);
-    });
-  }
+      });
+    }
+  }, 400);
 
   const getAvailability = async (mid) => {
     var response = await fetch(
@@ -65,7 +86,6 @@ const UpdateMeeting = () => {
       setTimeSlots(data[0]["date_time_slots"]);
       setSchedulerView(data[0]["meeting_details"]["scheduler_view"]);
       setSlotDuration(data[0]["meeting_details"]["slot_duration"]);
-      colorCells(data[0]["date_time_slots"]);
     } catch (err) {
       setMeetingFound(false);
       console.log("Error:", err);
@@ -73,6 +93,7 @@ const UpdateMeeting = () => {
 
     setLoading(false);
   };
+
   const colorCells = (data) => {
     const week_view = document.getElementsByClassName("e-work-hours");
     const month_view = document.getElementsByClassName("e-work-days");

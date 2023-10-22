@@ -106,14 +106,38 @@ const Create = () => {
     colorCells(timeslots);
   }, [timeslots]);
 
-  var changeViewBtns = document.getElementsByClassName("e-tbar-btn-text");
-  var monthViewBtns = document.getElementsByClassName("e-toolbar-item");
-  var viewBtns = [...changeViewBtns, ...monthViewBtns];
+  // useEffect(() => {
+  //   var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
+  //   for (var btn of changeViewBtns) {
+  //     btn.addEventListener("click", () => {
+  //       setTimeout(() => {
+  //         colorCells(timeslots);
+  //         var miniCalenderBtns = document.getElementsByClassName("e-calendar");
+  //         for (var btn of miniCalenderBtns) {
+  //           btn.addEventListener("click", () => {
+  //             setTimeout(() => {
+  //               colorCells(timeslots);
+  //             }, 400);
+  //           });
+  //         }
+  //       }, 400);
+  //     });
+  //   }
+  // }, []);
 
-  for (var btn of viewBtns) {
+  var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
+  for (var btn of changeViewBtns) {
     btn.addEventListener("click", () => {
       setTimeout(() => {
         colorCells(timeslots);
+        var miniCalenderBtns = document.getElementsByClassName("e-calendar");
+        for (var btn of miniCalenderBtns) {
+          btn.addEventListener("click", () => {
+            setTimeout(() => {
+              colorCells(timeslots);
+            }, 400);
+          });
+        }
       }, 400);
     });
   }
@@ -182,6 +206,7 @@ const Create = () => {
                   onClick={() => {
                     setKey(key + 1);
                     setView("Week");
+                    setTimeSlots([]);
                   }}
                 >
                   OK
