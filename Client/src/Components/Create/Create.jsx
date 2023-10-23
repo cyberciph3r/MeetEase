@@ -106,25 +106,6 @@ const Create = () => {
     colorCells(timeslots);
   }, [timeslots]);
 
-  // useEffect(() => {
-  //   var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
-  //   for (var btn of changeViewBtns) {
-  //     btn.addEventListener("click", () => {
-  //       setTimeout(() => {
-  //         colorCells(timeslots);
-  //         var miniCalenderBtns = document.getElementsByClassName("e-calendar");
-  //         for (var btn of miniCalenderBtns) {
-  //           btn.addEventListener("click", () => {
-  //             setTimeout(() => {
-  //               colorCells(timeslots);
-  //             }, 400);
-  //           });
-  //         }
-  //       }, 400);
-  //     });
-  //   }
-  // }, []);
-
   var changeViewBtns = document.getElementsByClassName("e-toolbar-item");
   for (var btn of changeViewBtns) {
     btn.addEventListener("click", () => {
@@ -141,6 +122,16 @@ const Create = () => {
       }, 400);
     });
   }
+
+  setTimeout(() => {
+    var calendarContainer =
+      document.getElementsByClassName("e-table-container");
+    for (var ele of calendarContainer) {
+      ele.addEventListener("touchend", (e) => {
+        colorCells(timeslots);
+      });
+    }
+  }, 400);
 
   const colorCells = (data) => {
     var week_view_slots = document.getElementsByClassName("e-work-hours");

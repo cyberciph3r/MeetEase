@@ -10,6 +10,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     textAlign: "left",
     color: "white",
+    [theme.breakpoints.down("xs")]: {
+      paddingLeft: "1rem",
+    },
   },
   title: {
     fontSize: "4rem",
@@ -23,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     paddingBottom: "1rem",
     fontFamily: "Montserrat",
     [theme.breakpoints.down("xs")]: {
-      fontSize: "1rem",
+      fontSize: "0.8rem",
     },
   },
   btn: {
@@ -43,6 +46,10 @@ const useStyles = makeStyles((theme) => ({
       borderRadius: "20px",
       backgroundColor: "black",
       color: "white",
+    },
+    [theme.breakpoints.down("xs")]: {
+      fontSize: "0.7rem",
+      padding: "0.2rem",
     },
   },
 }));
