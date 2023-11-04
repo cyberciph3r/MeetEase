@@ -154,7 +154,9 @@ const UserCalender = () => {
 
   const handleNext = async () => {
     try {
-      window.location.replace("/booked");
+      setTimeout(() => {
+        window.location.replace("/booked");
+      }, 400);
 
       await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/create-event-and-update-timeslots`,
