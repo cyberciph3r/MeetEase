@@ -133,7 +133,6 @@ const UserCalender = () => {
       alert("Slot not available!!");
       return;
     }
-    cell.style.cursor = "pointer";
 
     const startTime = new Date(args.startTime);
     const endTime = new Date(args.endTime);
@@ -154,7 +153,9 @@ const UserCalender = () => {
 
   const handleNext = async () => {
     try {
-      window.location.replace("/booked");
+      setTimeout(() => {
+        window.location.replace("/booked");
+      }, 500);
 
       await fetch(
         `${import.meta.env.VITE_BACKEND_URL}/create-event-and-update-timeslots`,
